@@ -151,8 +151,7 @@ export class AppComponent {
           new Aggregators.Sum('duration'),
           new Aggregators.Sum('cost')
         ],
-        aggregateCollapsed: true,
-        lazyTotalsCalculation: true
+        collapsed: true,
       },
       {
         getter: 'effortDriven',
@@ -162,9 +161,10 @@ export class AppComponent {
           new Aggregators.Sum('cost')
         ],
         collapsed: true,
-        lazyTotalsCalculation: true
       }
     ] as Grouping[]);
+    this.angularGrid.dataView.onGroupExpanded.subscribe(console.log);
+    this.angularGrid.dataView.onGroupCollapsed.subscribe(console.log);
   }
 
   loadData(rowCount: number) {
@@ -189,131 +189,5 @@ export class AppComponent {
         effortDriven: (i % 5 === 0)
       };
     }
-  }
-
-  clearGrouping() {
-    this.dataviewObj.setGrouping([]);
-  }
-
-  collapseAllGroups() {
-    this.dataviewObj.collapseAllGroups();
-  }
-
-  expandAllGroups() {
-    this.dataviewObj.expandAllGroups();
-  }
-
-  exportToExcel() {
-    this.angularGrid.excelExportService.exportToExcel({
-      filename: 'Export',
-      format: FileType.xlsx
-    });
-  }
-
-  exportToCsv(type = 'csv') {
-    this.angularGrid.exportService.exportToFile({
-      delimiter: (type === 'csv') ? DelimiterType.comma : DelimiterType.tab,
-      filename: 'myExport',
-      format: (type === 'csv') ? FileType.csv : FileType.txt
-    });
-  }
-
-  groupByDuration() {
-    this.dataviewObj.setGrouping({
-      getter: 'duration',
-      formatter: (g) => `Duration: ${g.value} <span style="color:green">(${g.count} items)</span>`,
-      aggregators: [
-        new Aggregators.Avg('percentComplete'),
-        new Aggregators.Sum('cost')
-      ],
-      comparer: (a, b) => Sorters.numeric(a.value, b.value, SortDirectionNumber.asc),
-      aggregateCollapsed: false,
-      lazyTotalsCalculation: true
-    } as Grouping);
-
-    // you need to manually add the sort icon(s) in UI
-    this.angularGrid.filterService.setSortColumnIcons([{ columnId: 'duration', sortAsc: true }]);
-    this.gridObj.invalidate(); // invalidate all rows and re-render
-  }
-
-  groupByDurationOrderByCount(aggregateCollapsed) {
-    this.angularGrid.filterService.setSortColumnIcons([]);
-    this.dataviewObj.setGrouping({
-      getter: 'duration',
-      formatter: (g) => `Duration: ${g.value} <span style="color:green">(${g.count} items)</span>`,
-      comparer: (a, b) => {
-        return a.count - b.count;
-      },
-      aggregators: [
-        new Aggregators.Avg('percentComplete'),
-        new Aggregators.Sum('cost')
-      ],
-      aggregateCollapsed,
-      lazyTotalsCalculation: true
-    } as Grouping);
-    this.gridObj.invalidate(); // invalidate all rows and re-render
-  }
-
-  groupByDurationEffortDriven() {
-    this.angularGrid.filterService.setSortColumnIcons([]);
-    this.dataviewObj.setGrouping([
-      {
-        getter: 'duration',
-        formatter: (g) => `Duration: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-        aggregators: [
-          new Aggregators.Sum('duration'),
-          new Aggregators.Sum('cost')
-        ],
-        aggregateCollapsed: true,
-        lazyTotalsCalculation: true
-      },
-      {
-        getter: 'effortDriven',
-        formatter: (g) => `Effort-Driven: ${(g.value ? 'True' : 'False')} <span style="color:green">(${g.count} items)</span>`,
-        aggregators: [
-          new Aggregators.Avg('percentComplete'),
-          new Aggregators.Sum('cost')
-        ],
-        collapsed: true,
-        lazyTotalsCalculation: true
-      }
-    ] as Grouping[]);
-    this.gridObj.invalidate(); // invalidate all rows and re-render
-  }
-
-  groupByDurationEffortDrivenPercent() {
-    this.angularGrid.filterService.setSortColumnIcons([]);
-    this.dataviewObj.setGrouping([
-      {
-        getter: 'duration',
-        formatter: (g) => `Duration: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-        aggregators: [
-          new Aggregators.Sum('duration'),
-          new Aggregators.Sum('cost')
-        ],
-        aggregateCollapsed: true,
-        lazyTotalsCalculation: true
-      },
-      {
-        getter: 'effortDriven',
-        formatter: (g) => `Effort-Driven: ${(g.value ? 'True' : 'False')}  <span style="color:green">(${g.count} items)</span>`,
-        aggregators: [
-          new Aggregators.Sum('duration'),
-          new Aggregators.Sum('cost')
-        ],
-        lazyTotalsCalculation: true
-      },
-      {
-        getter: 'percentComplete',
-        formatter: (g) => `% Complete: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-        aggregators: [
-          new Aggregators.Avg('percentComplete')
-        ],
-        aggregateCollapsed: true,
-        collapsed: true,
-        lazyTotalsCalculation: true
-      }
-    ] as Grouping[]);
-    this.gridObj.invalidate(); // invalidate all rows and re-render
   }
 }
