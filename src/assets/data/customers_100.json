@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Ethel Price",
+    "gender": "female",
+    "company": "Enersol",
+    "id": 1
+  },
+  {
+    "name": "Claudine Neal",
+    "gender": "female",
+    "company": "Sealoud",
+    "id": 2
+  },
+  {
+    "name": "Beryl Rice",
+    "gender": "female",
+    "company": "Velity",
+    "id": 3
+  },
+  {
+    "name": "Wilder Gonzales",
+    "gender": "male",
+    "company": "Geekko",
+    "id": 4
+  },
+  {
+    "name": "Georgina Schultz",
+    "gender": "female",
+    "company": "Suretech",
+    "id": 5
+  },
+  {
+    "name": "Carroll Buchanan",
+    "gender": "male",
+    "company": "Ecosys",
+    "id": 6
+  },
+  {
+    "name": "Valarie Atkinson",
+    "gender": "female",
+    "company": "Hopeli",
+    "id": 7
+  },
+  {
+    "name": "Schroeder Mathews",
+    "gender": "male",
+    "company": "Polarium",
+    "id": 8
+  },
+  {
+    "name": "Lynda Mendoza",
+    "gender": "female",
+    "company": "Dogspa",
+    "id": 9
+  },
+  {
+    "name": "Sarah Massey",
+    "gender": "female",
+    "company": "Bisba",
+    "id": 10
+  }
+]
