@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GridOption, Column, AngularGridInstance, Filters, FieldType, GroupTotalFormatters, Formatters, FileType, DelimiterType, Aggregators, Sorters, SortDirectionNumber, Grouping } from 'angular-slickgrid';
+import { SelectGroupAggregator } from './selectValue';
 
 @Component({
   selector: 'app-root',
@@ -55,7 +56,7 @@ export class AppComponent {
         sortable: true,
         type: FieldType.number,
         groupTotalsFormatter: GroupTotalFormatters.sumTotals,
-        params: { groupFormatterPrefix: 'Total: ' }
+        params: { groupFormatterPrefix: 'Totalx: ' }
       },
       {
         id: '%', name: '% Complete', field: 'percentComplete',
@@ -65,8 +66,8 @@ export class AppComponent {
         filter: { model: Filters.compoundSlider },
         sortable: true,
         type: FieldType.number,
-        groupTotalsFormatter: GroupTotalFormatters.avgTotalsPercentage,
-        params: { groupFormatterPrefix: '<i>Avg</i>: ' }
+        // groupTotalsFormatter: GroupTotalFormatters.avgTotalsPercentage,
+        // params: { groupFormatterPrefix: '<i>Avg</i>: ' }
       },
       {
         id: 'start', name: 'Start', field: 'start',
@@ -98,8 +99,8 @@ export class AppComponent {
         sortable: true,
         exportWithFormatter: true,
         formatter: Formatters.dollar,
-        groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
-        params: { groupFormatterPrefix: '<b>Total</b>: ' /*, groupFormatterSuffix: ' USD'*/ }
+        // groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
+        // params: { groupFormatterPrefix: '<b>Total</b>: ' /*, groupFormatterSuffix: ' USD'*/ }
       },
       {
         id: 'effort-driven', name: 'Effort Driven',
@@ -136,7 +137,7 @@ export class AppComponent {
     };
 
 
-    this.loadData(500);
+    this.loadData(100);
   }
 
   angularGridReady(angularGrid: AngularGridInstance) {
@@ -146,19 +147,20 @@ export class AppComponent {
     this.dataviewObj.setGrouping([
       {
         getter: 'duration',
-        formatter: (g) => `Duration: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+        formatter: (g) => {
+          // console.log(g);
+          return `Duration: ${g.value}  <span style="color:green">(${g.count} items)</span>`;
+        } ,
         aggregators: [
-          new Aggregators.Sum('duration'),
-          new Aggregators.Sum('cost')
+          new SelectGroupAggregator(0),
         ],
         collapsed: true,
       },
       {
         getter: 'effortDriven',
-        formatter: (g) => `Effort-Driven: ${(g.value ? 'True' : 'False')} <span style="color:green">(${g.count} items)</span>`,
+        formatter: (g) => `Effort-Driven: ${(g.value ? 'True' : 'False')} <span style="color:green">(${g.count} items) ${g.totals.group.title}</span> `,
         aggregators: [
-          new Aggregators.Avg('percentComplete'),
-          new Aggregators.Sum('cost')
+          new SelectGroupAggregator(1),
         ],
         collapsed: true,
       }
@@ -186,7 +188,9 @@ export class AppComponent {
         start: new Date(randomYear, randomMonth, randomDay),
         finish: new Date(randomYear, (randomMonth + 1), randomDay),
         cost: (i % 33 === 0) ? null : Math.round(Math.random() * 10000) / 100,
-        effortDriven: (i % 5 === 0)
+        effortDriven: (i % 5 === 0),
+        isGroupKey:true,
+        level:1,
       };
     }
   }
